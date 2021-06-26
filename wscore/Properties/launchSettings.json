@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5100",
+      "applicationUrl": "http://www.warchti.somee.com/",
       "sslPort": 0
     }
   },
@@ -12,43 +12,15 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
     "WScore": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
-      "applicationUrl": "http://localhost:5000"
+      "applicationUrl": "http://www.warchti.somee.com/"
     }
   }
 }
-
-
-//{
-//  "iisSettings": {
-//    "windowsAuthentication": false,
-//    "anonymousAuthentication": true,
-//    "iisExpress": {
-//      "applicationUrl": "http://www.warchti.somee.com/",
-//      "sslPort": 0
-//    }
-//  },
-//  "profiles": {
-//    "IIS Express": {
-//      "commandName": "IISExpress",
-//      "launchBrowser": true,
-//      "environmentVariables": {
-//        "ASPNETCORE_ENVIRONMENT": "Production"
-//      }
-//    },
-//    "WScore": {
-//      "commandName": "Project",
-//      "environmentVariables": {
-//        "ASPNETCORE_ENVIRONMENT": "Production"
-//      },
-//      "applicationUrl": "http://www.warchti.somee.com/"
-//    }
-//  }
-//}

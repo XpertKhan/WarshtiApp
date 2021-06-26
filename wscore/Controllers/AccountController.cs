@@ -94,7 +94,7 @@ namespace WScore.Controllers
                     await _accountHelper.SendVerificationEmail(user, Request.Headers["origin"]);
                     return Created($"/api/accounts/{user.Id}", _mapper.Map<UserModel>(user));
                 }
-                return Ok("User created successfully");
+                return Ok($"{result.Errors}");
             }
             catch (Exception ex)
             {
@@ -229,11 +229,11 @@ namespace WScore.Controllers
                         return Unauthorized("Incorrect username / password");
                     }
                 }
-                return Unauthorized("Incorrect username / password");
+                return NotFound("Incorrect username / password");
             }
             catch (Exception)
             {
-                return Unauthorized("Error while processing request");
+                return BadRequest("Error while processing request");
             }
         }
         #endregion
@@ -244,6 +244,10 @@ namespace WScore.Controllers
         public async Task<IActionResult> DeactivateAccount([FromQuery] int userId)
         {
             var account = _context.Users.Where(e => e.Id == userId).FirstOrDefault();
+            if (account == null)
+            {
+                return NotFound($"User with Id:{userId} no more exists" ); 
+            }
             account.IsActive = false;
             _context.Entry(account).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -266,9 +270,8 @@ namespace WScore.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
-                {
                     return NotFound($"User with email {model.Email} no more exists");
-                }
+                
 
                 user.ResetToken = GetUniqueToken();
                 user.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
@@ -292,30 +295,7 @@ namespace WScore.Controllers
             }
         }
 
-        [NonAction]
-        public string GetUniqueToken() 
-        {
-            var _token = GenerateToken();
-            do {
-               _token= GenerateToken();
-             }
-            while (ValidateOTP(_token.ToString()));
-            return _token.ToString();
-        }
-        [NonAction]
-        public int GenerateToken()
-        {
-            return new Random().Next(100000, 999999);
-        }
-        [NonAction]
-        public bool ValidateOTP(string otpToken)
-        {
-            var _currentTime = DateTime.Now.ToUniversalTime();
-            return _context.Users.Any(x =>
-              x.ResetToken == otpToken &&
-              x.ResetTokenExpires <= _currentTime);
-           
-        }
+   
         #endregion
 
         #region Forgot Password OTP by Mobile
@@ -328,9 +308,8 @@ namespace WScore.Controllers
             {
                 var user = await _userManager.Users.FirstOrDefaultAsync(p => p.PhoneNumber == model.Mobile);
                 if (user == null)
-                {
                     return NotFound($"User with mobile {model.Mobile} no more exists");
-                }
+                
 
                 user.ResetToken = GetUniqueToken();
                 user.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
@@ -363,19 +342,12 @@ namespace WScore.Controllers
         [HttpPost("validate-reset-token")]
         public IActionResult ValidateResetToken(ValidateResetTokenModel model)
         {
-            GetValidateResetToken(model);
-            return Ok(new { message = "Token is valid" });
+                  if(ValidateOTP(model.Token))
+                  return Ok(new { message = "Token is valid" });
+                  return NotFound($"Invalid or expire Token: {model.Token}");
         }
 
-        private void GetValidateResetToken(ValidateResetTokenModel model)
-        {
-            var account = _context.Users.SingleOrDefault(x =>
-                x.ResetToken == model.Token &&
-                x.ResetTokenExpires > DateTime.UtcNow);
-
-            if (account == null)
-                throw new Exception("Invalid token");
-        }
+        
 
         #endregion
 
@@ -385,9 +357,9 @@ namespace WScore.Controllers
         public IActionResult VerifyEmail(string token) 
         {
             var _currentTime = DateTime.Now.ToUniversalTime();
-            var account = _context.Users.SingleOrDefault(x => x.ResetToken == token && x.ResetTokenExpires<=_currentTime); 
+            var account = _context.Users.SingleOrDefault(x => x.ResetToken == token && x.ResetTokenExpires > _currentTime); 
 
-            if (account == null) NotFound();
+            if (account == null) return NotFound($"Invalid or expire Token: {token}");
 
             account.ResetToken = string.Empty;
             account.EmailConfirmed = true;
@@ -405,7 +377,7 @@ namespace WScore.Controllers
         {
            var _response= await GetResetPassword(model);
             if(_response=="InvalidToken")
-                return Ok(new { message = "OTP token is not valid or expired" });
+                return NotFound($"Invalid or expire Token: {model.Token}");
             return Ok(new { message = "Password reset successful, you can now login" });
         }
 
@@ -431,6 +403,32 @@ namespace WScore.Controllers
         }
         #endregion
 
-        
+        #region OTP Validations
+        [NonAction]
+        public string GetUniqueToken()
+        {
+            var _token = GenerateToken();
+            do
+            {
+                _token = GenerateToken();
+            }
+            while (ValidateOTP(_token.ToString()));
+            return _token.ToString();
+        }
+        [NonAction]
+        public int GenerateToken()
+        {
+            return new Random().Next(100000, 999999);
+        }
+        [NonAction]
+        public bool ValidateOTP(string otpToken)
+        {
+            var _currentTime = DateTime.Now.ToUniversalTime();
+            return _context.Users.Any(x =>
+              x.ResetToken == otpToken &&
+              x.ResetTokenExpires > _currentTime);
+
+        }
+        #endregion
     }
 }
