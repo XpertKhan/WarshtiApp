@@ -36,7 +36,7 @@ namespace WScore.Controllers
         public ActionResult Get()
         {
             var model = _context.Announcements
-                            .Include(p => p.AnnouncementImages);
+                            .Include(p => p.AnnouncementImages).ToList();
             return Ok(_mapper.Map<IEnumerable<AnnouncementModel>>(model));
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,10 +11,12 @@ namespace WScore.Helpers
     public class AccountHelper
     {
         private readonly IEmailService _emailService;
+        private readonly IConfiguration config;
 
-        public AccountHelper(IEmailService emailService)
+        public AccountHelper(IEmailService emailService, IConfiguration _config)
         {
             _emailService = emailService;
+            config = _config;
         }
 
         public static string RandomTokenString()
@@ -25,8 +28,9 @@ namespace WScore.Helpers
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
 
-        public async Task SendVerificationEmail(User account, string origin)
+        public async Task SendVerificationEmail(User account)
         {
+            string origin = config["IsLocal"].ToString() == "True" ? config["LocalDomain"].ToString() : config["LiveDomain"].ToString();
             string message;
             if (!string.IsNullOrEmpty(origin))
             {

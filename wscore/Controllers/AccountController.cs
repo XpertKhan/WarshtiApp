@@ -80,7 +80,7 @@ namespace WScore.Controllers
                     UserTypeId = (int)model.Type,
                     VerificationToken = GetUniqueToken(),
                     ResetToken = GetUniqueToken(),
-                    ResetTokenExpires = DateTime.Now.ToUniversalTime(),
+                    ResetTokenExpires = DateTime.Now.ToUniversalTime().AddDays(1),
                     IsActive = true
                 };
 
@@ -91,7 +91,7 @@ namespace WScore.Controllers
                     user.IsActive = true;
                     _context.Entry(user).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
-                    await _accountHelper.SendVerificationEmail(user, Request.Headers["origin"]);
+                    await _accountHelper.SendVerificationEmail(user);
                     return Created($"/api/accounts/{user.Id}", _mapper.Map<UserModel>(user));
                 }
                 return Ok($"{result.Errors}");

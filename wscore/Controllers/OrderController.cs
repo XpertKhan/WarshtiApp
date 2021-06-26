@@ -44,13 +44,13 @@ namespace WScore.Controllers
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             int uId = 0;
-            if (identity != null)
-            {
-                // or
-                string userId = identity.FindFirst("id").Value;
-                int.TryParse(userId, out uId);
+            //if (identity != null)
+            //{
+            //    // or
+            //    string userId = identity.FindFirst("id").Value;
+            //    int.TryParse(userId, out uId);
 
-            }
+            //}
             var model = _context.Orders
                             .Include(p => p.Service)
                             .Include(p => p.Workshop)

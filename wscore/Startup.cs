@@ -171,6 +171,7 @@ namespace WScore
                 config.AddProfile(new UserSettingProfile());
                 config.AddProfile(new FaqProfile());
                 config.AddProfile(new QuestionProfile());
+                config.AddProfile(new ServiceModelCustomProfile());
             }, typeof(Startup));
              
             services.Configure<SmtpSenderOptions>(_config);

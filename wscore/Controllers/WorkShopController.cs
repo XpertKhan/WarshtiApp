@@ -107,7 +107,7 @@ namespace WScore.Controllers
                     UserTypeId = (int)UserType.Workshop,
                     VerificationToken = GetUniqueToken(),
                     ResetToken= GetUniqueToken(),
-                    ResetTokenExpires= DateTime.Now.ToUniversalTime()
+                    ResetTokenExpires= DateTime.Now.ToUniversalTime().AddDays(1)
 
                 };
 
@@ -115,7 +115,7 @@ namespace WScore.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _accountHelper.SendVerificationEmail(user, Request.Headers["origin"]);
+                    await _accountHelper.SendVerificationEmail(user);
                     return Created($"/api/workshops/{user.Id}", _mapper.Map<WorkShopUserModel>(user));
                 }
                 return BadRequest("Error creating user");
