@@ -78,7 +78,9 @@ namespace WScore.Controllers
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserTypeId = (int)model.Type,
-                    VerificationToken = AccountHelper.RandomTokenString(),
+                    VerificationToken = GetUniqueToken(),
+                    ResetToken = GetUniqueToken(),
+                    ResetTokenExpires = DateTime.Now.ToUniversalTime(),
                     IsActive = true
                 };
 
@@ -308,9 +310,10 @@ namespace WScore.Controllers
         [NonAction]
         public bool ValidateOTP(string otpToken)
         {
+            var _currentTime = DateTime.Now.ToUniversalTime();
             return _context.Users.Any(x =>
               x.ResetToken == otpToken &&
-              x.ResetTokenExpires > DateTime.UtcNow);
+              x.ResetTokenExpires <= _currentTime);
            
         }
         #endregion
@@ -381,10 +384,12 @@ namespace WScore.Controllers
         [HttpGet("verify-email")]
         public IActionResult VerifyEmail(string token) 
         {
-            var account = _context.Users.SingleOrDefault(x => x.VerificationToken == token);
+            var _currentTime = DateTime.Now.ToUniversalTime();
+            var account = _context.Users.SingleOrDefault(x => x.ResetToken == token && x.ResetTokenExpires<=_currentTime); 
 
             if (account == null) NotFound();
 
+            account.ResetToken = string.Empty;
             account.EmailConfirmed = true;
             account.VerificationToken = string.Empty;
 

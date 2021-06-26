@@ -30,14 +30,14 @@ namespace WScore.Helpers
             string message;
             if (!string.IsNullOrEmpty(origin))
             {
-                var verifyUrl = $"{origin}/api/accounts/verify-email?token={account.VerificationToken}";
+                var verifyUrl = $"{origin}/api/accounts/verify-email?token={account.ResetToken}";
                 message = $@"<p>Please click the below link to verify your email address:</p>
                              <p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
             }
             else
             {
                 message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                             <p><code>{account.VerificationToken}</code></p>";
+                             <p><code>{account.ResetToken}</code></p>";
             }
 
            await _emailService.SendEmailAsync(

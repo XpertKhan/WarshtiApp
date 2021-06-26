@@ -25,16 +25,20 @@ namespace WScore.Controllers
         private readonly IMapper _mapper;
         private readonly AccountHelper _accountHelper;
         private readonly DistanceHelper _distanceHelper;
+        private readonly WScoreContext _context;
 
         public WorkShopController(UserManager<User> userManager,
             IMapper mapper,
             AccountHelper accountHelper,
-            DistanceHelper distanceHelper)
+            DistanceHelper distanceHelper,
+            WScoreContext context
+          )
         {
             _userManager = userManager;
             _mapper = mapper;
             _accountHelper = accountHelper;
             _distanceHelper = distanceHelper;
+            _context = context;
         }
 
         [HttpPost()]
@@ -101,7 +105,10 @@ namespace WScore.Controllers
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserTypeId = (int)UserType.Workshop,
-                    VerificationToken = AccountHelper.RandomTokenString()
+                    VerificationToken = GetUniqueToken(),
+                    ResetToken= GetUniqueToken(),
+                    ResetTokenExpires= DateTime.Now.ToUniversalTime()
+
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -117,6 +124,31 @@ namespace WScore.Controllers
             {
                 return BadRequest($"{ex.Message}");
             }
+        }
+
+        [NonAction]
+        public string GetUniqueToken()
+        {
+            var _token = GenerateToken();
+            do
+            {
+                _token = GenerateToken();
+            }
+            while (ValidateOTP(_token.ToString()));
+            return _token.ToString();
+        }
+        [NonAction]
+        public int GenerateToken()
+        {
+            return new Random().Next(100000, 999999);
+        }
+        [NonAction]
+        public bool ValidateOTP(string otpToken)
+        {
+            return _context.Users.Any(x =>
+              x.ResetToken == otpToken &&
+              x.ResetTokenExpires > DateTime.UtcNow);
+
         }
         #endregion
     }
