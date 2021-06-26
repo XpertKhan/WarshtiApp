@@ -1,0 +1,71 @@
+﻿@model FaqUpdateViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="modal fade" data-backdrop="static" id="color-create" tabindex="-1" role="dialog">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <h1 class="modal-title text-white">
+                    <i class="flaticon2-pen icon-2x text-white"></i>
+                    Faq <small class="text-white">Edit</small>
+                </h1>
+                <button type="button" class="close text-white" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form asp-area="Application" asp-controller="Faq" asp-action="Update"
+                      method="post" autocomplete="off" id="FrmCreate">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="Question">Question<i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <textarea type="text" class="form-control" asp-for="Question" rows="3"></textarea>
+                                <span asp-validation-for="Question" class="text-danger small text-uppercase"></span>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="Answer">Answer<i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <textarea type="text" class="form-control" asp-for="Answer" rows="3"></textarea>
+                                <span asp-validation-for="Answer" class="text-danger small text-uppercase"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" data-save="modal" class="btn btn-success">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $.validator.unobtrusive.parse('#FrmCreate');
+</script>
+<script>
+    $(function () {
+
+    });
+</script>

@@ -1,0 +1,81 @@
+﻿@model SignUpViewModel
+@{
+    ViewData["Title"] = "Forget Password";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+
+<!--begin::Login Sign up form-->
+<div class="login-signup">
+    <div class="mb-20">
+        <h3>Sign Up</h3>
+        <div class="text-muted font-weight-bold">Enter your details to create your account</div>
+    </div>
+    <form class="form" id="kt_login_signup_form" autocomplete="off"
+          asp-area="" asp-controller="Auth" asp-action="SignUp" method="post">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(excludePropertyErrors: true, "", new { @class = "text-danger" })
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Fullname" asp-for="Name" />
+            <span asp-validation-for="Name" class="text-danger small float-left pt-1 pb-4"></span>
+        </div>
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Username" asp-for="Username" autocomplete="off" />
+            <span asp-validation-for="Username" class="text-danger small float-left pt-1 pb-4"></span>
+        </div>
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="Password" asp-for="Password" />
+            <span asp-validation-for="Password" class="text-danger small float-left pt-1 pb-4"></span>
+        </div>
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger small float-left pt-1"></span>
+        </div>
+        <div class="form-group mb-5 text-left mt-10">
+            <div class="checkbox-inline">
+                <label class="checkbox m-0">
+                    <input type="checkbox" name="agree" />
+                    <span></span>I Agree the
+                    <a href="#" class="font-weight-bold ml-1">terms and conditions</a>.
+                </label>
+            </div>
+            <div class="form-text text-muted text-center"></div>
+        </div>
+        <div class="form-group d-flex flex-wrap flex-center mt-10">
+            <button id="kt_login_signup_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-2">Sign Up</button>
+            <button id="kt_login_signup_cancel" class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-2">Cancel</button>
+        </div>
+    </form>
+    <div class="mt-10">
+        <span class="opacity-70 mr-4">Already have an account</span>
+        <a asp-area="" asp-controller="Auth" asp-action="Login" id="kt_login_signup" class="text-muted text-hover-primary font-weight-bold">Login!</a>
+    </div>
+</div>
+<!--end::Login Sign up form-->
+
+
+@section Scripts{
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        $(function () {
+            function _showForm(form) {
+                var _login = $('#kt_login');
+
+                var cls = 'login-' + form + '-on';
+                var form = 'kt_login_' + form + '_form';
+
+                _login.removeClass('login-forgot-on');
+                _login.removeClass('login-signin-on');
+                _login.removeClass('login-signup-on');
+
+                _login.addClass(cls);
+
+                _login.addClass(cls);
+
+                KTUtil.animateClass(KTUtil.getById(form), 'animate__animated animate__backInUp');
+            }
+
+            _showForm('signup');
+        });
+    </script>
+}

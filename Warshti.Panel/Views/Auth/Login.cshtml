@@ -1,0 +1,71 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+    var returnUrl = @Context.Request.Query["returnUrl"];
+}
+
+<!--begin::Login Sign in form-->
+<div class="login-signin">
+    <div class="mb-20">
+        <h3>Sign In To Admin</h3>
+        <div class="text-muted font-weight-bold">Enter your details to login to your account:</div>
+    </div>
+    <form class="form" id="kt_login_signin_form" asp-route-returnUrl="@returnUrl" autocomplete="off"
+          asp-area="" asp-controller="Auth" asp-action="Login" method="post">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(excludePropertyErrors: true, "", new { @class = "text-danger float-left" })
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Username" asp-for="Username" />
+            <span asp-validation-for="Username" class="text-danger small float-left pt-1 pb-4"></span>
+        </div>
+        <div class="form-group mb-5">
+            <input class="form-control h-auto form-control-solid py-4 px-8" type="password" placeholder="Password" asp-for="Password" />
+            <span asp-validation-for="Password" class="text-danger small float-left "></span>
+        </div>
+        <div class="form-group d-flex flex-wrap justify-content-between align-items-center mt-8">
+            <div class="checkbox-inline">
+                <label class="checkbox m-0 text-muted">
+                    <input type="checkbox" name="remember" />
+                    <span></span>Remember me
+                </label>
+            </div>
+            <a asp-area="" asp-controller="Auth" asp-action="ForgetPassword" id="kt_login_forgot" class="text-muted text-hover-primary">Forget Password ?</a>
+        </div>
+        <button id="kt_login_signin_submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4">Sign In</button>
+    </form>
+    <div class="mt-10">
+        <span class="opacity-70 mr-4">Don't have an account yet?</span>
+        <a asp-area="" asp-controller="Auth" asp-action="SignUp" id="kt_login_signup" class="text-muted text-hover-primary font-weight-bold">Sign Up!</a>
+    </div>
+</div>
+<!--end::Login Sign in form-->
+
+
+@section Scripts{
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+        $(function () {
+            function _showForm(form) {
+                var _login = $('#kt_login');
+
+                var cls = 'login-' + form + '-on';
+                var form = 'kt_login_' + form + '_form';
+
+                _login.removeClass('login-forgot-on');
+                _login.removeClass('login-signin-on');
+                _login.removeClass('login-signup-on');
+
+                _login.addClass(cls);
+
+                _login.addClass(cls);
+
+                KTUtil.animateClass(KTUtil.getById(form), 'animate__animated animate__backInUp');
+            }
+
+            _showForm('signin');
+        });
+    </script>
+}

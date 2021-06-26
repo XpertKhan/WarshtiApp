@@ -1,0 +1,261 @@
+﻿
+@{
+    ViewData["Title"] = "Models";
+}
+
+@section Styles
+{
+    <!--begin::Page Vendors Styles(used by this page)-->
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Page Vendors Styles-->
+}
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-2">
+                <!--begin::Page Title-->
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">
+                    @*<i class="flaticon-settings-1 text-primary"></i>*@
+                    Models
+                </h5>
+                <!--end::Page Title-->
+                <!--begin::Actions-->
+                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+                <span class="text-muted font-weight-bold mr-4">Manage data</span>
+                <!--end::Actions-->
+            </div>
+            <!--end::Info-->
+            <!--begin::Toolbar-->
+            <div class="d-flex align-items-center">
+                <a href="#" class="btn btn-light-warning font-weight-bolder" id="btnNew">
+                    <i class="la la-plus"></i>
+                    New Record
+                </a>
+            </div>
+            <!--end::Toolbar-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <!--begin::Row-->
+            <div class="card card-custom">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="card-icon">
+                            <i class="flaticon-edit icon-2x text-primary"></i>
+                        </span>
+                        <h3 class="card-label">Models</h3>
+                    </div>
+                    <div class="card-toolbar">
+                        <!--begin::Dropdown-->
+                        <div class="dropdown dropdown-inline mr-2">
+                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="la la-download"></i>Export
+                            </button>
+                            <!--begin::Dropdown Menu-->
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right p-4">
+                                <ul class="nav flex-column nav-hover">
+                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Choose an option:</li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-print"></i>
+                                            <span class="nav-text">Print</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-copy"></i>
+                                            <span class="nav-text">Copy</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-excel-o"></i>
+                                            <span class="nav-text">Excel</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-text-o"></i>
+                                            <span class="nav-text">CSV</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-pdf-o"></i>
+                                            <span class="nav-text">PDF</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end::Dropdown Menu-->
+                        </div>
+                        <!--end::Dropdown-->
+                        <!--begin::Button-->
+                        @*<a href="#" class="btn btn-primary font-weight-bolder">
+                                <i class="la la-plus"></i>New Record
+                            </a>*@
+                        <!--end::Button-->
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <!--begin: Datatable-->
+                    <table class="table table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <!--end: Datatable-->
+                </div>
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<div id="modal-placeholder"></div>
+
+@section Scripts{
+
+    <!--start::Page Vendors-->
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="~/lib/moment.js/moment.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
+    <!--end::Page Vendors-->
+
+
+    <script src="~/scripts/models-data.js"></script>
+
+    <script>
+        $(function () {
+            $("ul.menu-nav li:eq(2)").addClass("menu-item-active");
+
+            let placeholderElement = $('#modal-placeholder');
+
+            $("#btnNew").on("click", function (e) {
+                e.preventDefault();
+
+                let element = $(this);
+
+                $.ajax({
+                    url: "/Car/Model/Create",
+                    type: "GET",
+                    success: function (response) {
+                        placeholderElement.html(response);
+                        placeholderElement.find('.modal').modal('show');
+                    },
+                    error: function () {
+                    }
+                });
+            });
+
+            placeholderElement.on('click', '[data-save="modal"]', function (event) {
+                event.preventDefault();
+
+                var form = $(this).parents('.modal').find('form');
+                var actionUrl = form.attr('action');
+                var dataToSend = form.serialize();
+
+                $.post(actionUrl, dataToSend).done(function (data) {
+                    var newBody = $('.modal-body', data);
+                    placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                    // find IsValid input field and check it's value
+                    // if it's valid then hide modal window
+                    var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                    if (isValid) {
+                        placeholderElement.find('.modal').modal('hide');
+
+                        var table = $('#kt_datatable');
+                        table.DataTable().ajax.reload();
+                    }
+                });
+            });
+
+            $(document).delegate("#kt_datatable .btn-edit", "click", function (e) {
+                e.preventDefault();
+                let element = $(this);
+
+
+                $.ajax({
+                    url: "/Car/Model/Update",
+                    type: "GET",
+                    data: { id: element.attr("data-id") },
+                    success: function (response) {
+                        placeholderElement.html(response);
+                        placeholderElement.find('.modal').modal('show');
+                    },
+                    error: function () {
+                    }
+                });
+            });
+
+            $(document).delegate("#kt_datatable .btn-delete", "click", function (e) {
+                e.preventDefault();
+                let element = $(this);
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Selected record will be deleted!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then(function (result) {
+                    if (result.value) {
+
+                        $.ajax({
+                            url: "/Car/Model/Delete",
+                            type: "DELETE",
+                            data: { id: element.attr("data-id") },
+                            success: function (response) {
+                                if (response.status == true) {
+                                    Swal.fire(
+                                        "Completed!",
+                                        "Record has been deleted.",
+                                        "success"
+                                    );
+                                } else {
+                                    Swal.fire(
+                                        "Error",
+                                        response.message,
+                                        "error"
+                                    );
+                                }
+
+                                var table = $('#kt_datatable');
+                                table.DataTable().ajax.reload();
+                            },
+                            error: function () {
+                            }
+                        })
+
+
+                        // result.dismiss can be "cancel", "overlay", "close", and "timer"
+                    } else if (result.dismiss === "cancel") {
+                        Swal.fire(
+                            "Cancelled",
+                            "You have cancelled the operation.",
+                            "error"
+                        )
+                    }
+                });
+            });
+        });
+    </script>
+}

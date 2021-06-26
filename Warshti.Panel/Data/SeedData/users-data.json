@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Salman Malik",
+    "phoneNumber": "+923308451234",
+    "email": "makki@deepbluess.com",
+    "isActive": true,
+    "userTypeId":  1
+  },
+  {
+    "name": "Muhammad Ali Taj",
+    "phoneNumber": "+923346199910",
+    "email": "malitaj@askhorizons.com",
+    "isActive": true,
+    "userTypeId": 2
+  }
+]

@@ -1,0 +1,64 @@
+﻿@model LanguageCreateViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="modal fade" data-backdrop="static" id="color-create" tabindex="-1" role="dialog">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <h1 class="modal-title text-white">
+                    <i class="flaticon-plus icon-2x text-white"></i>
+                    Language <small class="text-white">New</small>
+                </h1>
+                <button type="button" class="close text-white" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form asp-area="Lookup" asp-controller="Language" asp-action="Create"
+                      method="post" autocomplete="off" id="FrmCreate">
+                    @Html.AntiForgeryToken()
+
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="Name">Name <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <input type="text" class="form-control" asp-for="Name" />
+                                <span asp-validation-for="Name" class="text-danger small text-uppercase"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" data-save="modal" class="btn btn-success">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $.validator.unobtrusive.parse('#FrmCreate');
+</script>
+<script>
+    $(function () {
+
+    });
+</script>

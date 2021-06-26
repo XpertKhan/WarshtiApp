@@ -1,0 +1,92 @@
+﻿@model OrderCreateViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="modal fade" data-backdrop="static" id="service-create" tabindex="-1" role="dialog">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <h1 class="modal-title text-white">
+                    <i class="flaticon-plus icon-2x text-white"></i>
+                    Offer <small class="text-white">Creation</small>
+                </h1>
+                <button type="button" class="close text-white" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form asp-area="Admin" asp-controller="Order" asp-action="Create"
+                      method="post" autocomplete="off" id="FrmCreate">
+                    @Html.AntiForgeryToken()
+
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="WorkshopId">Workshop <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <select class="custom-select" asp-for="WorkshopId" asp-items="Model.Workshops">
+                                    <option value="">Select From List</option>
+                                </select>
+                                <span asp-validation-for="WorkshopId" class="text-danger small text-uppercase"></span>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="ServiceId">Service <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <select class="custom-select" asp-for="ServiceId" asp-items="Model.Services">
+                                    <option value="">Select From List</option>
+                                </select>
+                                <span asp-validation-for="ServiceId" class="text-danger small text-uppercase"></span>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="CreationDate">Creation Date <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                
+                                @Html.TextBoxFor(model => model.CreationDate, "{0: yyyy-MM-dd}",
+                                new { @class = "form-control date-picker" })
+                                <span asp-validation-for="CreationDate" class="text-danger small text-uppercase"></span>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="ExpectedCompletionDate">Expected Completion Date <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+
+                                @Html.TextBoxFor(model => model.ExpectedCompletionDate, "{0: yyyy-MM-dd}",
+                                new { @class = "form-control date-picker" })
+                                <span asp-validation-for="ExpectedCompletionDate" class="text-danger small text-uppercase"></span>
+                            </div>
+                            <div class="col-lg-12 form-group">
+                                <label class="col-form-label font-weight-bold" asp-for="EstimatedPrice">Estimated Price <i class="fa fa-star text-danger" style="font-size: 8pt;"></i></label>
+                                <input type="text" class="form-control" asp-for="EstimatedPrice" />
+                                <span asp-validation-for="EstimatedPrice" class="text-danger small text-uppercase"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" data-save="modal" class="btn btn-success">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $.validator.unobtrusive.parse('#FrmCreate');
+</script>
+<script>
+    $(function () {
+
+    });
+</script>
