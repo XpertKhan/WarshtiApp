@@ -1,9 +1,39 @@
+//{
+//  "iisSettings": {
+//    "windowsAuthentication": false,
+//    "anonymousAuthentication": true,
+//    "iisExpress": {
+//      //"applicationUrl": "http://www.warchti.somee.com/",
+//      "applicationUrl": "http://atif94-001-site1.ctempurl.com/",
+//      "sslPort": 0
+//    }
+//  },
+//  "profiles": {
+//    "IIS Express": {
+//      "commandName": "IISExpress",
+//      "launchBrowser": true,
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Production"
+//      }
+//    },
+//    "WScore": {
+//      "commandName": "Project",
+//      "environmentVariables": {
+//        "ASPNETCORE_ENVIRONMENT": "Production"
+//      },
+//      "applicationUrl": "http://atif94-001-site1.ctempurl.com/"
+
+//      //"applicationUrl": "http://www.warchti.somee.com/"
+//    }
+//  }
+//}
+
 {
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://www.warchti.somee.com/",
+      "applicationUrl": "http://localhost:5100",
       "sslPort": 0
     }
   },
@@ -12,15 +42,15 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "WScore": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://www.warchti.somee.com/"
+      "applicationUrl": "http://localhost:5000"
     }
   }
 }

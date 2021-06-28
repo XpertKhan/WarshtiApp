@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Warshti.Entities.WScore;
 using WScore.Entities.Identity;
 
 namespace Warshti.Entities.Maintenance
@@ -20,5 +21,8 @@ namespace Warshti.Entities.Maintenance
         public string CommercialRegister { get; set; }
         public string ElectonicPaymentAccount { get; set; }
         public byte[] Photo { get; set; }
+        public string Address { get; set; }
+        public int AvgRating { get; set; } 
+        public virtual ICollection<Announcement> Announcements { get; set; }
     }
 }

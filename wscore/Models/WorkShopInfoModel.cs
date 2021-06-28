@@ -18,5 +18,7 @@ namespace WScore.Models
         public string CommercialRegister { get; set; }
         public string ElectonicPaymentAccount { get; set; }
         public byte[] Photo { get; set; }
+        public string Address { get; set; }
+        public int AvgRating { get; set; }
     }
 }

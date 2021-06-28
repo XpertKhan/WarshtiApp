@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Warshti.Entities;
 
 namespace Musan.Entities.Migrations
 {
     [DbContext(typeof(WScoreContext))]
-    partial class WScoreContextModelSnapshot : ModelSnapshot
+    [Migration("20210627124736_WorkflowAnnuouncementRelation")]
+    partial class WorkflowAnnuouncementRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

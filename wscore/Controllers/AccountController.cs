@@ -94,7 +94,7 @@ namespace WScore.Controllers
                     await _accountHelper.SendVerificationEmail(user);
                     return Created($"/api/accounts/{user.Id}", _mapper.Map<UserModel>(user));
                 }
-                return Ok($"{result.Errors}");
+                return BadRequest($"Could not be created user due to some validation error.");
             }
             catch (Exception ex)
             {
